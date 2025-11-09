@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PokeWallet Generator</title>
+<style>
+:root {
+  --primary: #1e3a8a;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e40af;
+  --accent: #06d6a0;
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-darker: #0a0f1c;
+  --text-light: #e2e8f0;
+  --text-muted: #94a3b8;
+  --shadow: rgba(0,0,0,0.3);
+  --border: #334155;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--bg-darker) 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 20px var(--shadow);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(6, 214, 160, 0.05) 0%, transparent 50%);
+}
+
+main {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.hero-text {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.card {
+  background: var(--bg-card);
+  box-shadow: 0 8px 32px var(--shadow);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.7;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  border-color: var(--primary-light);
+}
+
+.upload-area {
+  background: var(--bg-darker);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.upload-area:hover {
+  border-color: var(--primary-light);
+  background: rgba(30, 64, 175, 0.1);
+}
+
+.upload-area.highlight {
+  border-color: var(--accent);
+  background: rgba(6, 214, 160, 0.05);
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: block;
+  cursor: pointer;
+  color: var(--primary-light);
+  font-weight: 600;
+  margin-top: 1rem;
+  padding: 10px 20px;
+  border: 1px solid var(--primary-light);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.file-label:hover {
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+button, .download-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+}
+
+button:hover, .download-btn:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+button:disabled {
+  background: #374151;
+  color: #6b7280;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+#output {
+  background: var(--bg-darker);
+  padding: 1.8rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 3rem 0 1.5rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.crypto-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: conic-gradient(from 0deg, var(--accent) 0%, var(--primary-light) 100%);
+  border-radius: 50%;
+  position: relative;
+  margin-right: 12px;
+}
+
+.crypto-icon::before {
+  content: '₿';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.glow-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (max-width: 600px) {
+  header {
+    font-size: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  main {
+    padding: 0 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  button, .download-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .upload-area {
+    padding: 2rem 1rem;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <span class="crypto-icon"></span>
+  PokeWallet Generator
+</header>
+
+<main>
+  <p class="hero-text">Click here to understand how it works: <a href="about.html">About</a></p>
+  <p class="hero-text">Upload a Pokémon export file (.pk3 to .pk7) and generate a unique private key (WIF).</p>
+  
+  <div class="upload-area" id="uploadArea">
+    <p>Drag & drop your file here or click to browse</p>
+    <input type="file" id="fileInput" accept=".pk3,.pk4,.pk5,.pk6,.pk7" class="file-input">
+    <label for="fileInput" class="file-label">Choose File</label>
+  </div>
+  
+  <div class="button-group">
+    <button id="viewWallet" disabled>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L20 7V17L12 22L4 17V7L12 2Z"></path>
+        <path d="M12 22V12"></path>
+        <path d="M8 10L12 12L16 10"></path>
+      </svg>
+      Generate WIF Key
+    </button>
+    
+    <a class="download-btn" href="#" id="downloadHtml" download="CryptoVaultGenerator.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Download Page
+    </a>
+  </div>
+  
+  <div id="output" class="card"></div>
+</main>
+
+<footer>Open Source Project - Buy me a Coffee: </footer>
+
+<script>
+function u16(b,o){return(b[o]|(b[o+1]<<8))>>>0;}
+function u32(b,o){return(b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))>>>0;}
+function decodeGBAString(b,o,l){
+  const map={},c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",base=0xBB;
+  for(let i=0;i<c.length;i++)map[base+i]=c[i];
+  const sp={0x7F:' ',0x50:'.',0x51:',',0x52:'?',0x53:'!',0x54:'-',0x58:'♂',0x59:'♀',0xE0:'é',0xFF:'\0'};
+  for(const[k,v]of Object.entries(sp))map[k]=v;
+  let s='';for(let i=0;i<l;i++){const x=b[o+i];if(x===0xFF)break;s+=map[x]||'?';}
+  return s.trim();
+}
+function decodeUTF16LE(b,o,l){const v=new DataView(b.buffer,b.byteOffset+o,l);let s='';
+  for(let i=0;i<l;i+=2){const c=v.getUint16(i,true);if(c===0)break;s+=String.fromCharCode(c);}
+  return s.trim();
+}
+async function sha256(buf){return new Uint8Array(await crypto.subtle.digest("SHA-256",buf));}
+const ALPHABET="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+function base58encode(bytes){
+  let x=BigInt('0x'+Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join(''));
+  let s='';while(x>0n){let r=x%58n;x/=58n;s=ALPHABET[Number(r)]+s;}
+  for(const b of bytes){if(b===0x00)s='1'+s;else break;}
+  return s;
+}
+async function toWIF(privBytes){
+  const prefix=new Uint8Array([0x80,...privBytes,0x01]); // 0x01 = compressed
+  const hash1=await sha256(prefix);
+  const hash2=await sha256(hash1);
+  const checksum=hash2.slice(0,4);
+  const wifBytes=new Uint8Array([...prefix,...checksum]);
+  return base58encode(wifBytes);
+}
+
+function detectGen(size){
+  if(size<=100)return 3;
+  if(size<=136)return 4;
+  if(size<=220)return 5;
+  if(size<=260)return 6;
+  return 7;
+}
+function parseFile(name,b){
+  const size=b.length;const gen=detectGen(size);
+  const pid=u32(b,0);
+  if(gen===3){
+    const ot=decodeGBAString(b,0x14,7);
+    const oid=u32(b,4);const tid=oid&0xFFFF,sid=(oid>>>16)&0xFFFF;
+    let sp=null;for(let i=0x20;i<0x50;i+=2){const x=u16(b,i);if(x>0&&x<10000){sp=x;break;}}
+    return{generation:3,pid,tid,sid,ot,species:sp};
+  }else{
+    const tid=u16(b,0x0C),sid=u16(b,0x0E);
+    let otOffset=0x68;if(size>=232)otOffset=0xB0;
+    const ot=decodeUTF16LE(b,otOffset,24);
+    const sp=u16(b,0x08);
+    return{generation:gen,pid,tid,sid,ot,species:sp};
+  }
+}
+
+let pokeData=null;
+const fileInput=document.getElementById("fileInput");
+const uploadArea=document.getElementById("uploadArea");
+
+fileInput.addEventListener("change",async e=>{
+  const f=e.target.files[0];if(!f)return;
+  const buf=new Uint8Array(await f.arrayBuffer());
+  try{
+    pokeData=parseFile(f.name,buf);
+    showPokemon(pokeData);
+    document.getElementById("viewWallet").disabled=false;
+    uploadArea.innerHTML=`<p><strong>${f.name}</strong> loaded successfully!</p>`;
+    uploadArea.style.borderColor="var(--accent)";
+    uploadArea.style.background="rgba(6, 214, 160, 0.05)";
+  }catch(err){
+    document.getElementById("output").innerText="Error: "+err;
+  }
+});
+
+uploadArea.addEventListener("dragover",e=>{
+  e.preventDefault();
+  uploadArea.classList.add("highlight");
+});
+
+uploadArea.addEventListener("dragleave",()=>{
+  uploadArea.classList.remove("highlight");
+});
+
+uploadArea.addEventListener("drop",e=>{
+  e.preventDefault();
+  uploadArea.classList.remove("highlight");
+  fileInput.files=e.dataTransfer.files;
+  const event=new Event("change");
+  fileInput.dispatchEvent(event);
+});
+
+uploadArea.addEventListener("click",()=>{
+  fileInput.click();
+});
+
+async function showPokemon(d){
+  const div=document.getElementById("output");
+  div.textContent=
+`Generation: ${d.generation}
+Species ID: ${d.species}
+PID: ${d.pid}
+TID: ${d.tid}
+SID: ${d.sid}
+OT: ${d.ot||"(empty)"}`;
+}
+
+document.getElementById("viewWallet").addEventListener("click",async()=>{
+  if(!pokeData)return;
+  const uniqueKey=`${pokeData.species}-${pokeData.pid}-${pokeData.tid}-${pokeData.sid}-${pokeData.ot}`;
+  const hash=new Uint8Array(await sha256(new TextEncoder().encode(uniqueKey)));
+  const wif=await toWIF(hash);
+  document.getElementById("output").textContent+=`\n\n--- Private Key ---\n${wif}`;
+});
+
+document.getElementById("downloadHtml").addEventListener("click",e=>{
+  const blob=new Blob([document.documentElement.outerHTML],{type:"text/html"});
+  e.target.href=URL.createObjectURL(blob);
+});
+</script>
+</body>
+</html>
