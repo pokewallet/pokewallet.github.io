@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About PokeWallet</title>
+<style>
+:root {
+  --primary: #1e3a8a;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e40af;
+  --accent: #06d6a0;
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-darker: #0a0f1c;
+  --text-light: #e2e8f0;
+  --text-muted: #94a3b8;
+  --shadow: rgba(0,0,0,0.3);
+  --border: #334155;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--bg-darker) 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 20px var(--shadow);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(6, 214, 160, 0.05) 0%, transparent 50%);
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.card {
+  background: var(--bg-card);
+  box-shadow: 0 8px 32px var(--shadow);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  border-color: var(--primary-light);
+}
+
+h1, h2, h3 {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 1.2rem;
+  margin-top: 1.2rem;
+  color: var(--accent);
+}
+
+p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+ul, ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+.step {
+  display: flex;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+}
+
+.step-number {
+  background: var(--primary);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.highlight {
+  background: rgba(6, 214, 160, 0.1);
+  border-left: 4px solid var(--accent);
+  padding: 1rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 0;
+}
+
+.code-block {
+  background: var(--bg-darker);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+button, .nav-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+}
+
+button:hover, .nav-btn:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.crypto-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: conic-gradient(from 0deg, var(--accent) 0%, var(--primary-light) 100%);
+  border-radius: 50%;
+  position: relative;
+  margin-right: 12px;
+}
+
+.crypto-icon::before {
+  content: '₿';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.glow-text {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 3rem 0 1.5rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 600px) {
+  header {
+    font-size: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  main {
+    padding: 0 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <span class="crypto-icon"></span>
+  About PokeWallet
+</header>
+
+<main>
+  <div class="card">
+    <h1>PokeWallet Tutorial</h1>
+    <p>Learn how to export Pokémon files using PKHeX and understand how PokeWallet generates unique cryptographic keys from your Pokémon data.</p>
+    
+    <div class="button-group">
+      <a href="index.html" class="nav-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"></path>
+        </svg>
+        Back to Generator
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Exporting Pokémon with PKHeX</h2>
+    
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Download and Open PKHeX</h3>
+        <p>Get the latest version of PKHeX from the official repository and open your save file.</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>Select Your Pokémon</h3>
+        <p>Click on the Pokémon in your party or boxes that you want to export.</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Export as .pk* File</h3>
+        <p>Right-click the Pokémon and select "Set" then "Export" or use the Export button to save as a .pk3 to .pk7 file depending on your game generation.</p>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Save the File</h3>
+        <p>Choose a location to save your Pokémon file. Remember where you saved it for the next step.</p>
+      </div>
+    </div>
+    
+    <div class="highlight">
+      <p><strong>Note:</strong> PKHeX supports generations 3-7. Make sure to export in the correct format for your game:</p>
+      <ul>
+        <li><strong>.pk3</strong> - Generation 3 (Ruby, Sapphire, Emerald, FireRed, LeafGreen)</li>
+        <li><strong>.pk4</strong> - Generation 4 (Diamond, Pearl, Platinum, HeartGold, SoulSilver)</li>
+        <li><strong>.pk5</strong> - Generation 5 (Black, White, Black 2, White 2)</li>
+        <li><strong>.pk6</strong> - Generation 6 (X, Y, Omega Ruby, Alpha Sapphire)</li>
+        <li><strong>.pk7</strong> - Generation 7 (Sun, Moon, Ultra Sun, Ultra Moon)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>How PokeWallet Generation Works</h2>
+    
+    <h3>Data Extraction</h3>
+    <p>PokeWallet reads specific data from your Pokémon file:</p>
+    <ul>
+      <li><strong>Species ID</strong> - The numerical identifier of your Pokémon species</li>
+      <li><strong>PID (Personality ID)</strong> - A unique 32-bit value that determines many of your Pokémon's characteristics</li>
+      <li><strong>TID (Trainer ID)</strong> - Your trainer's public ID number</li>
+      <li><strong>SID (Secret ID)</strong> - Your trainer's hidden ID number</li>
+      <li><strong>OT (Original Trainer)</strong> - The name of the Pokémon's original trainer</li>
+    </ul>
+    
+    <h3>Unique Key Creation</h3>
+    <p>These values are combined into a unique string:</p>
+    <div class="code-block">
+      UniqueKey = Species-PID-TID-SID-OT
+    </div>
+    
+    <h3>Cryptographic Hashing</h3>
+    <p>The unique string is processed through SHA-256 hashing to create a private key:</p>
+    <div class="code-block">
+      PrivateKey = SHA-256(UniqueKey)
+    </div>
+    
+    <h3>WIF Format Conversion</h3>
+    <p>The private key is then converted to Wallet Import Format (WIF):</p>
+    <ol>
+      <li>Add a prefix byte (0x80 for mainnet)</li>
+      <li>Add a compression flag (0x01)</li>
+      <li>Calculate a checksum using double SHA-256</li>
+      <li>Encode everything in Base58</li>
+    </ol>
+    
+    <div class="highlight">
+      <p><strong>Security Note:</strong> Each Pokémon creates a completely unique cryptographic key. Even the same Pokémon species with different PIDs or different trainers will generate entirely different keys.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Frequently Asked Questions</h2>
+    
+    <h3>Is this secure?</h3>
+    <p>Yes, the entire process happens locally in your browser. No data is sent to any server.</p>
+    
+    <h3>Can I use these keys for real cryptocurrency?</h3>
+    <p>While the keys are cryptographically valid, this tool is primarily for educational and experimental purposes.</p>
+    
+    <h3>What if I have the same Pokémon with the same stats?</h3>
+    <p>The PID (Personality ID) is almost always unique, ensuring different keys even for seemingly identical Pokémon.</p>
+    
+    <h3>Which Pokémon generations are supported?</h3>
+    <p>Generations 3 through 7 are supported (.pk3 to .pk7 files).</p>
+  </div>
+
+  <div class="button-group">
+    <a href="index.html" class="nav-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 20L4 12L10 4M19 20L13 12L19 4"></path>
+      </svg>
+      Generate Your PokeWallet
+    </a>
+  </div>
+</main>
+
+<footer>Open Source Project - Buy me a coffee : </footer>
+</body>
+</html>
